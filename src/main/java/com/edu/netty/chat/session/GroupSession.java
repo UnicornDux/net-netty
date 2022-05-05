@@ -2,6 +2,7 @@ package com.edu.netty.chat.session;
 
 import io.netty.channel.Channel;
 
+import java.util.List;
 import java.util.Set;
 
 public interface GroupSession {
@@ -54,6 +55,6 @@ public interface GroupSession {
      * @param groupName
      * @return 返回组成员的 Channel 集合, 没有返回空集合
      */
-    Set<Channel> getMemberChannel(String groupName);
+    List<Channel> getMemberChannel(String groupName);
 
 }

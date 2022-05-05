@@ -35,6 +35,19 @@ public abstract class Message implements Serializable {
     public static final int GROUP_CHAT_RESPONSE_MESSAGE = 11;
     public static final int GROUP_MEMBER_REQUEST_MESSAGE = 12;
     public static final int GROUP_MEMBER_RESPONSE_MESSAGE = 13;
+    public static final int PING_MESSAGE = 14;
+    public static final int PONG_MESSAGE = 15;
+
+
+    /**
+     * 请求类型 byte 值
+     */
+    public static final int RPC_MESSAGE_TYPE_REQUEST = 101;
+
+    /**
+     * 响应类型 byte 值
+     */
+    public static final int RPC_MESSAGE_TYPE_RESPONSE = 102;
 
     private static final Map<Integer, Class<?>> messageClasses = new HashMap<>();
 

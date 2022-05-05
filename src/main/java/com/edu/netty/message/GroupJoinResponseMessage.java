@@ -1,6 +1,16 @@
 package com.edu.netty.message;
 
-public class GroupJoinResponseMessage extends Message {
+import lombok.Data;
+import lombok.ToString;
+
+@Data
+@ToString(callSuper = true)
+public class GroupJoinResponseMessage extends AbstractResponseMessage {
+
+    public GroupJoinResponseMessage(boolean success, String reason) {
+        super(success, reason);
+    }
+
     @Override
     public int getMessageType() {
         return Message.GROUP_JOIN_RESPONSE_MESSAGE;
