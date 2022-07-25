@@ -28,16 +28,16 @@ public class CloseFutureClient {
     public static void main(String[] args) throws InterruptedException {
         NioEventLoopGroup group = new NioEventLoopGroup();
         ChannelFuture channelFuture = new Bootstrap()
-                .group(group)
-                .channel(NioSocketChannel.class)
-                .handler(new ChannelInitializer<NioSocketChannel>() {
-                    @Override
-                    protected void initChannel(NioSocketChannel channel) throws Exception {
-                        channel.pipeline().addLast(new LoggingHandler(LogLevel.DEBUG));
-                        channel.pipeline().addLast(new StringEncoder());
-                    }
-                })
-                .connect("localhost", 8000);
+            .group(group)
+            .channel(NioSocketChannel.class)
+            .handler(new ChannelInitializer<NioSocketChannel>() {
+                @Override
+                protected void initChannel(NioSocketChannel channel) throws Exception {
+                    channel.pipeline().addLast(new LoggingHandler(LogLevel.DEBUG));
+                    channel.pipeline().addLast(new StringEncoder());
+                }
+            })
+            .connect("localhost", 8000);
         Channel channel = channelFuture.sync().channel();
 
         new Thread(() -> {
@@ -48,7 +48,7 @@ public class CloseFutureClient {
                    // 异步方法, 非阻塞
                    channel.close();
                    // 这里关闭连接打印出来的时候，因为异步的原因，真正关闭
-                   // 连接的是一个新的 NiOEventLoopGroup 的线程, 不是当前线程
+                   // 连接的是一个新的 NioEventLoopGroup 的线程, 不是当前线程
                    // 所以channel 什么时候被真的关闭这里是无法监测到的
                    // log.debug("close channel....");
                    break;
@@ -68,7 +68,6 @@ public class CloseFutureClient {
         // log.debug("waiting for close");
         // closeFuture.sync();
         // log.debug("post operation after close");
-
         channel.closeFuture().addListener(future -> {
             // 关闭之后的操作
             log.debug("post operation after close");
@@ -76,7 +75,6 @@ public class CloseFutureClient {
             // 程序并不会停止，这时候如何让程序最好自己的善后工后停止服务。
             // 程序优雅的停止
             group.shutdownGracefully();
-
         });
     }
 }

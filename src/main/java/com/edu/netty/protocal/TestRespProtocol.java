@@ -74,7 +74,7 @@ public class TestRespProtocol {
                                 byteBuf.writeBytes("$4".getBytes());
                                 byteBuf.writeBytes(line);
 
-                                byteBuf.writeBytes("Alex".getBytes());
+                                byteBuf.writeBytes("aaaa".getBytes());
                                 byteBuf.writeBytes(line);
                                 ctx.writeAndFlush(byteBuf);
                             }

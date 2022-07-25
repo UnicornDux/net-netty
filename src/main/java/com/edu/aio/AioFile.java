@@ -19,7 +19,7 @@ import java.nio.file.StandardOpenOption;
  */
 
 @Slf4j
-public class AIODemo {
+public class AioFile{
     public static void main(String[] args) {
 
         try (AsynchronousFileChannel channel = AsynchronousFileChannel

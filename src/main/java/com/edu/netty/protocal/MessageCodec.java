@@ -1,5 +1,6 @@
 package com.edu.netty.protocal;
 
+import com.edu.netty.chat.config.Config;
 import com.edu.netty.message.Message;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
@@ -51,17 +52,15 @@ public class MessageCodec extends ByteToMessageCodec<Message> {
         // 2. => 1字节 -- 版本, 字节的版本，方便做版本升级兼容处理
         out.writeByte(1);
         // 3. => 1字节 -- 系列化的方式：0 - jdk, 1 - json
-        out.writeByte(0);
+        // 根据配置文件，获取系列化方式
+        out.writeByte(Config.getSerializerAlgorithm().ordinal());
         // 4. => 1字节 -- 指令的类型: 见 Message 的类型 Type
         out.writeByte(msg.getMessageType());
         // 5. => 4字节 -- 消息的序号
         out.writeInt(msg.getSequenceId());
         // 6. => 1字节 -- 对齐填充位置 (一般都是 2 的倍数)
         out.writeByte(0);
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(bos);
-        oos.writeObject(msg);
-        byte[] bytes = bos.toByteArray();
+        byte[] bytes = Config.getSerializerAlgorithm().serializer(msg);
         // 7. => 4字节 -- 消息的长度
         out.writeInt(bytes.length);
         // 8. => 消息的内容
@@ -80,6 +79,7 @@ public class MessageCodec extends ByteToMessageCodec<Message> {
 
         int magicNum = in.readInt();
         byte version = in.readByte();
+        // 获取序列化算法
         byte serializeType = in.readByte();
         byte messageType = in.readByte();
         int sequenceId = in.readInt();
@@ -90,19 +90,12 @@ public class MessageCodec extends ByteToMessageCodec<Message> {
 
         byte[] bytes = new byte[length];
         in.readBytes(bytes, 0, length);
-        if (serializeType == 0) {
-            // jdk
-            ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
-            Message message = (Message) ois.readObject();
-            // 将数据放入到 out 集合中
-            out.add(message);
-            log.debug("{}", message.toString());
-        }else if (serializeType == 1) {
-            // json
-            String json = new String(bytes, Charset.defaultCharset());
-            out.add(json);
-        }else {
-            log.debug("不支持的序列化方式");
-        }
+        Serializer.Algorithm value = Serializer.Algorithm.values()[serializeType];
+        // 反序列化的时候，需要指定对应的反序列化类型
+        Class<?> messageClass = Message.getMessageClass(messageType);
+        Object message = value.deserializer(messageClass, bytes);
+        // 将数据放入到 out 集合中
+        out.add(message);
+        log.debug("{}", message.toString());
     }
 }

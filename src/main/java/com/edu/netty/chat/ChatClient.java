@@ -47,7 +47,7 @@ public class ChatClient {
                             // .addLast(LOGGING_HANDLER)
                             .addLast(SHARABLE_MESSAGE_CODEC)
                             .addLast(new IdleStateHandler(0, 3, 0))
-                                .addLast(new ChannelDuplexHandler(){
+                            .addLast(new ChannelDuplexHandler(){
                                     @Override
                                     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
                                         IdleStateEvent event = (IdleStateEvent) evt;

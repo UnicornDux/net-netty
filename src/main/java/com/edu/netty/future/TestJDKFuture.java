@@ -14,6 +14,7 @@ public class TestJDKFuture {
         // 2. 向线程池提交任务，并返回 Future 对象,
         //  - 如果提交的任务是 Callable 对象，可以抛出异常，返回结果
         //  - 如果提交的任务是 Runnable 对象，没有返回值，也不能抛异常
+        
         Future<Integer> submit = service.submit(() -> {
 
             log.debug("task start.....");

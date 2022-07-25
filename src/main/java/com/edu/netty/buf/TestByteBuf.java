@@ -27,11 +27,8 @@ public class TestByteBuf {
     public static void main(String[] args) {
 
         // create_byteBuf();
-
         // slice_api();
-
         // duplicate_api();
-
         composite_api();
     }
 
@@ -39,7 +36,10 @@ public class TestByteBuf {
         /**
          * 从下面的输出可以看到，ByteBuf的不同于 NIO 中使用的 ByteBuffer，
          * > ByteBuf 会随着写入数据不同而动态变化自身的容量,
-         * > 容量变化时，扩容的规则是 2 倍增长.
+         * > 容量变化时，扩容的规则是 :
+         * 1. 当写入的数据总大小未超过 512 字节，则会进行扩容为 最靠近的 16 的 整数倍
+         * 2. 当写入的数据总大小超过了 512 字节，则会 扩容为 最靠近的 2^n 大小，
+         *
          */
         // heapBuffer 堆内存
         ByteBuf byteBuf = ByteBufAllocator.DEFAULT.heapBuffer();
@@ -62,15 +62,14 @@ public class TestByteBuf {
 
     }
 
-
-
-
     /**
      * 这里主要测试几个底层对拷贝做了优化的API 与一些注意事项
      * ------------------------------------------------------
      *  > release() 释放 ByteBuf 引用指针，配合内存回收
      *  > retain()  为 ByteBuf 增加引用指针，配合内存回收
-     *  以上方法主要是配合进行 ByteBuf 的内存回收, 这两个方法都是出自 ReferenceCounted 接口，每个ByteBuf 都实现了这个接口
+     *
+     *  以上方法主要是配合进行 ByteBuf 的内存回收, 这两个方法都是出自 ReferenceCounted 接口，
+     *  每个ByteBuf 都实现了这个接口
      *  用于方便进行内存的回收，具体的回收事宜由对应的实现类自己来实现。
      */
     public static void slice_api(){
@@ -114,7 +113,6 @@ public class TestByteBuf {
         duplicate.setByte(2,'k');
         log(duplicate);
         log(byteBuf);
-
     }
 
     /**
@@ -131,7 +129,6 @@ public class TestByteBuf {
         buffer.writeBytes(buf1);
         buffer.writeBytes(buf2);
         log(buffer);
-
 
         CompositeByteBuf cbuf = ByteBufAllocator.DEFAULT.compositeBuffer();
 

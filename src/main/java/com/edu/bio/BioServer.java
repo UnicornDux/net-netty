@@ -19,8 +19,6 @@ public class BioServer {
 
         ServerSocket serverSocket = null;
 
-        InputStream in = null;
-        OutputStream os = null;
         Socket socket = null;
 
         try{
@@ -50,16 +48,6 @@ public class BioServer {
         }catch (Exception e){
             e.printStackTrace();
         }finally {
-            try {
-                in.close();
-            } catch (IOException e) {
-                in = null;
-            }
-            try {
-                os.close();
-            } catch (IOException e) {
-                os = null;
-            }
             try {
                 serverSocket.close();
             } catch (IOException e) {

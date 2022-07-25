@@ -30,7 +30,7 @@ public class TestNettyFuture {
 
         futureTask.addListener((future) -> {
             // 任务完成后的回调, 所以这里肯定是有结果的，直接用非阻塞的方法拿到结果
-            // 这里获取结果也不再是主线程中，而是再 NIOEventLoop 中执行
+            // 这里获取结果也不再是主线程中，而是再 NioEventLoop 中执行
             log.debug("result: {}", future.getNow());
 
             // 用完之后关闭程序

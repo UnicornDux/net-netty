@@ -63,9 +63,12 @@ public class TestHttpProtocol {
                         // ch.pipeline().addLast(new ChannelInboundHandlerAdapter(){
                         //     @Override
                         //     public void channelRead(io.netty.channel.ChannelHandlerContext ctx, Object msg) throws Exception {
+                        //         // 一个 HTTP 请求发送到服务器被识别 为 HttpRequest, HttpContent 两部分
                         //         log.debug("接收数据的类型: {}", msg.getClass());
                         //         if (msg instanceof HttpRequest) {
+                        //             // 处理 HttpRequest 
                         //         } else if (msg instanceof HttpContent) {
+                        //            // 处理 HttpContent
                         //         }
                         //     }
                         // });

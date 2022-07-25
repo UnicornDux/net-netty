@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -30,13 +29,14 @@ import java.util.Set;
  * Buffer可以理解为一块内存区域，可以写入数据，并且在之后读取它。
  *
  * --选择器（Selector）
- *
- * 选择器（Selector）可以实现一个单独的线程来监控多个注册在它上面的信道（Channel），通过一定的选择机制，实现多路复用的效果。
+ * -----------------------
+ * 选择器（Selector）可以实现一个单独的线程来监控多个注册在它上面的信道（Channel），
+ * 通过一定的选择机制，实现多路复用的效果。
  *
  * 基于NIO中的 Selector 实现IO多路复用，将连接channel注册到 Selector 中进行管理
- *  > Selector 是一个提供channel注册服务的线程，可以同时对接多个channel,并在线程池中为channel适配，并寻找合适的线程处理channel;
- *    在NIO模型中线程数量大大降低，线程切换效率大幅提高。
- *  > Selector 可以监控多个channel，并且可以通过key来获取channel的注册信息，事件信息(以下是事件的种类)
+ *  > Selector 是一个提供channel注册服务的线程，可同时对接多个channel,并在线程池中为channel适配，
+ *    并寻找合适的线程处理channel; 在NIO模型中线程数量大大降低，线程切换效率大幅提高。
+ *  > Selector 可监控多个channel，并且可通过key获取channel的注册信息，事件信息(以下是事件的种类)
  *    ---------------------------------------------------------------------------
  *    | accept  | connect  |  read  |  write  |  close  |  register  |  select  |
  *    ---------------------------------------------------------------------------
