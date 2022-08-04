@@ -46,10 +46,15 @@ public class ChatClient {
                             // 调试日志，调试完成后可关闭
                             // .addLast(LOGGING_HANDLER)
                             .addLast(SHARABLE_MESSAGE_CODEC)
+                            // 客户端也添加一个处理器，用于触发写空闲检测，我们在这里设置的间隔时间应该小于服务器空闲检测的间隔时间
+                            // 一般设置为服务端空闲检测的 1/2 左右
+                            // 当我们检测到客户端 3s 没有向服务端发送数据的时候，自动向服务端触发一个 IdleState#WRITE_IDLE 事件
                             .addLast(new IdleStateHandler(0, 3, 0))
+                            // ChannelDuplexHandler 可以同时作为入站和出站处理器
                             .addLast(new ChannelDuplexHandler(){
                                     @Override
                                     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+                                        // 
                                         IdleStateEvent event = (IdleStateEvent) evt;
                                         if (event.state() == IdleState.WRITER_IDLE) {
                                             // log.info("写空闲超时,触发回调事件");

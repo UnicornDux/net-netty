@@ -21,8 +21,10 @@ public class RpcResponseMessageHandler extends SimpleChannelInboundHandler<RpcRe
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RpcResponseMessage response) {
+        
         // 打印收到的消息
         log.debug(response.toString());
+
         // 获取到请求的 promise, 并移除这个 promise，占用内存越来越多
         Promise<Object> promise = PROMISE_MAPS.remove(response.getSequenceId());
         if (promise != null) {

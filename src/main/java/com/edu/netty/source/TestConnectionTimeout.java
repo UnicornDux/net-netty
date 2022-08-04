@@ -1,5 +1,6 @@
 package com.edu.netty.source;
 
+import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
@@ -20,10 +21,32 @@ public class TestConnectionTimeout {
 
         ServerBootstrap bootstrap = new ServerBootstrap()
                 .group(group)
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 1000)
+                // 这里的 SO_TIMEOUT 是传统的阻塞IO 模式下调整阻塞时间的参数
+                // .option(ChannelOption.SO_TIMEOUT)
+                
                 .channel(NioServerSocketChannel.class)
                 .childHandler(new LoggingHandler());
         ChannelFuture future = bootstrap.bind(8080);
+        try {
+            future.sync().channel().closeFuture().sync();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }finally {
+            group.shutdownGracefully();
+        }
+    }
+
+    // 客户端超时设置
+    public static void Client(){
+        NioEventLoopGroup group = new NioEventLoopGroup();
+
+        Bootstrap bootstrap = new Bootstrap()
+                .group(group)
+                // 设置客户端连接超时时间
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 1000)
+                .channel(NioServerSocketChannel.class)
+                .handler(new LoggingHandler());
+        ChannelFuture future = bootstrap.connect("localhost", 8080);
         try {
             future.sync().channel().closeFuture().sync();
         } catch (InterruptedException e) {

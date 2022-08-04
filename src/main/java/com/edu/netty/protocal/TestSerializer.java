@@ -3,7 +3,6 @@ package com.edu.netty.protocal;
 import com.edu.netty.chat.config.Config;
 import com.edu.netty.message.LoginRequestMessage;
 import com.edu.netty.message.Message;
-import com.sun.xml.internal.ws.server.sei.SEIInvokerTube;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.embedded.EmbeddedChannel;
