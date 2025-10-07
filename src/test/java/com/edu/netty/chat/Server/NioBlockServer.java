@@ -282,10 +282,11 @@ public class NioBlockServer {
                             // ---------------------------------------------------------------
                             // 由于数据没有发送完成，下一次事件循环的时候会触发一个可写事件
                             // 我们正好可以利用这一点，来处理这个问题 (注意需要在原来的基础上追加一个事件)
-                            key.interestOps(SelectionKey.OP_WRITE + key.interestOps());
-                            // 将没有写完的数据作为附件添加到 key 中
-                            key.attach(buffer);
-
+                            if (buffer.hasRemaining()) {
+                                key.interestOps(SelectionKey.OP_WRITE + key.interestOps());
+                                // 将没有写完的数据作为附件添加到 key 中
+                                key.attach(buffer);
+                            }
                         }else if (key.isReadable()) {
 
                         }else if (key.isWritable()) {
