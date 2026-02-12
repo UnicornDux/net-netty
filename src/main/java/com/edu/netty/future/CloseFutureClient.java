@@ -12,6 +12,7 @@ import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -68,7 +69,7 @@ public class CloseFutureClient {
         // log.debug("waiting for close");
         // closeFuture.sync();
         // log.debug("post operation after close");
-        channel.closeFuture().addListener(future -> {
+        channel.closeFuture().addListener( fu-> {
             // 关闭之后的操作
             log.debug("post operation after close");
             // channel 关闭之后，程序并没有停止，因为 NioEventLoopGroup 的线程没有关闭

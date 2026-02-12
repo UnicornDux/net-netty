@@ -1,0 +1,64 @@
+//  install  proto version 28.4
+// -----------------------------------------------------
+// 1. install protobuf generator
+// 2. install protobuf highlighted (highlight)
+// 3. install protocol Buffers (grammar support)
+// -----------------------------------------------------
+// > need this dependency
+//  <dependency>
+//     <groupId>com.google.protobuf</groupId>
+//     <artifactId>protobuf-java-util</artifactId>
+//     <version>4.28.3</version>
+//  </dependency>
+//
+//  > use this proto file to generate a UserProto Class
+// -----------------------------------------------------
+//
+// > ch.pipeline.addLast(new ProtobufVarint32LengthFieldPrepender())
+//   - this handle: add a length field to the protobuf message package
+// > ch.pipeline.addLast(new ProtobufEncoder())  client
+//   - this handle: use Protobuf encoder the message
+// ----------------------
+// > ch.pipeline.addLast(new ProtobufVarint32FrameDecoder())
+//   - this handle: handle protobuf message package with length header
+// > ch.pipeline.addLast(new ProtobufDecoder(User.getDefaultInstance()))
+
+
+// protobuf syntax proto2 / proto3
+syntax = "proto3";
+
+// generate package name
+option java_package = "com.edu.netty.proto";
+
+// file name
+option java_outer_classname = "User";
+
+//
+// entity
+//  data type : string, int32, int64, uint32, uint64, bool, float, double, map, enum
+//
+message User {
+
+  // every field must have a sequence
+  // serialize and deserialize need the sequence
+  //
+  int32 uid = 1;
+  CommandType cmd = 2;
+  string name = 3;
+  map<string, int32> course = 4;
+  enum CommandType {
+
+    // enum first must bu 0;
+    NORMAL = 0;
+    HEARTBEAT_REQUEST = 1;
+    HEARTBEAT_RESPONSE = 2;
+  }
+  // use self define message as type
+  Teacher teacher = 5;
+}
+
+// in one file can declare multiple message type
+message Teacher {
+  int32 tid = 1;
+  string name = 2;
+}
